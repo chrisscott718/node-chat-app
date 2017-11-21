@@ -16,15 +16,17 @@ let server = http.createServer(app);
 let io = socketIO(server);
 
 io.on('connection', (socket) => {
-  socket.emit('newMessage', {
-    from: 'chris',
-    text: 'message.text',
-    createdAt: new Date().getTime()
-  });
-  
+  // emits to a single connection
+  console.log('New user connected');
   socket.on('createMessage', (message) => {
-    console.log('new message was created, sending message back to clients');
+    // io aka socketIO(server) emits events to every single connection
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    })
   });
+
 });
 
 // middleware to tell express to use this static directory
