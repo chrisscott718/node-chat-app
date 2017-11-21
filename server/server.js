@@ -16,9 +16,14 @@ let server = http.createServer(app);
 let io = socketIO(server);
 
 io.on('connection', (socket) => {
-  console.log('New user connected');
-  socket.on('disconnect', () => {
-    console.log('Disconnected from client');
+  socket.emit('newMessage', {
+    from: 'chris',
+    text: 'message.text',
+    createdAt: new Date().getTime()
+  });
+  
+  socket.on('createMessage', (message) => {
+    console.log('new message was created, sending message back to clients');
   });
 });
 
