@@ -17,21 +17,21 @@ socket.on('newMessage', function(message) {
 
   $('#messages').append(html);
 });
+
 // new location message
 socket.on('newLocationMessage', function(message) {
-  var formattedTime = moment(message.createdAt).format('h:mm a'),
-      $li = $('<li></li>'),
-      $a = $('<a target="_blank">My Current Location</a>'),
-      $span = $('<span></span>');
+  var formattedTime = moment(message.createdAt).format('h:mm a');
 
-  $li.text(`${message.from}: `);
-  $a.attr('href', message.url);
-  $span.text(formattedTime);
+  var template = $('#location-message-template').html();
 
-  $li.append($a);
-  $li.append($span);
+  var html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    timestamp: formattedTime,
+    url: message.url
+  });
 
-  $('#messages').append($li);
+  $('#messages').append(html);
 });
 
 // send message click handler
