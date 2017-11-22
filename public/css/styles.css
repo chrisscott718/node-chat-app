@@ -154,16 +154,6 @@ button:disabled {
   padding: 10px;
 }
 
-.chat__messages li {
-  margin: 10px 0;
-}
-
-.chat__messages span {
-  opacity: 0.7;
-  display: block;
-  font-size: 10px;
-}
-
 .message {
   padding: 10px;
 }

@@ -5,16 +5,17 @@ var $messageSendBtn = $('#send-message');
 
 // on new message received from the server
 socket.on('newMessage', function(message) {
-  var formattedTime = moment(message.createdAt).format('h:mm a'),
-      $li = $('<li></li>'),
-      $span = $('<span></span>');
+  var formattedTime = moment(message.createdAt).format('h:mm a');
 
-  $li.text(`${message.from}: ${message.text}`);
-  $span.text(formattedTime);
+  var template = $('#message-template').html();
 
-  $li.append($span);
+  var html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    timestamp: formattedTime
+  });
 
-  $('#messages').append($li);
+  $('#messages').append(html);
 });
 // new location message
 socket.on('newLocationMessage', function(message) {
