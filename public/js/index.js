@@ -3,24 +3,32 @@ var $locationButton = $("#send-location");
 var $messageTextBox = $('input[name=message]');
 var $messageSendBtn = $('#send-message');
 
-// on user connection
-socket.on('connect', function() {
-});
-
 // on new message received from the server
 socket.on('newMessage', function(message) {
-  var $li = $('<li></li>');
+  var formattedTime = moment(message.createdAt).format('h:mm a'),
+      $li = $('<li></li>'),
+      $span = $('<span></span>');
+
   $li.text(`${message.from}: ${message.text}`);
+  $span.text(formattedTime);
+
+  $li.append($span);
+
   $('#messages').append($li);
 });
 // new location message
 socket.on('newLocationMessage', function(message) {
-  var $li = $('<li></li>'),
-      $a = $('<a target="_blank">My Current Location</a>');
+  var formattedTime = moment(message.createdAt).format('h:mm a'),
+      $li = $('<li></li>'),
+      $a = $('<a target="_blank">My Current Location</a>'),
+      $span = $('<span></span>');
 
   $li.text(`${message.from}: `);
   $a.attr('href', message.url);
+  $span.text(formattedTime);
+
   $li.append($a);
+  $li.append($span);
 
   $('#messages').append($li);
 });
@@ -28,7 +36,7 @@ socket.on('newLocationMessage', function(message) {
 // send message click handler
 $('#message-form').on('submit', function(e){
   e.preventDefault();
-
+  if(!$messageTextBox.val()) return;
   $messageSendBtn.attr('disabled', true);
   $messageTextBox.prop('disabled', true);
 
