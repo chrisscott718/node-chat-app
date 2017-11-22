@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
     // we can pass a call back with it.
     // if things go well here we can acknowledge it by calling the callback
     // which will be called on the client side. we can also send data back
-    callback('This is from the server.');
+    callback();
   });
   // wait for create location message
   socket.on('createLocationMessage', (loc) => {
