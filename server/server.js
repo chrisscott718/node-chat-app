@@ -33,8 +33,12 @@ io.on('connection', (socket) => {
 
   // wait for create message from client
   socket.on('createMessage', (message, callback) => {
-    // io aka socketIO(server) emits events to every single connection
-    io.emit('newMessage', generateMessage(message.from, message.text));
+    let user = users.getUser(socket.id);
+
+    if(user && isRealString(message.text)) {
+      // io aka socketIO(server) emits events to every single connection
+      io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
+    }
     // when the client emits something to the Server
     // we can pass a call back with it.
     // if things go well here we can acknowledge it by calling the callback
@@ -43,8 +47,11 @@ io.on('connection', (socket) => {
   });
   // wait for create location message
   socket.on('createLocationMessage', (loc) => {
-    // send to every single connection
-    io.emit('newLocationMessage', generateLocationMessage('Admin', loc.lat, loc.lng));
+    let user = users.getUser(socket.id);
+
+    if(user) {
+      io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, loc.lat, loc.lng));
+    }
   });
 
   socket.on('disconnect', () => {

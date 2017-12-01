@@ -87,7 +87,6 @@ $('#message-form').on('submit', function(e){
   $messageTextBox.prop('disabled', true);
 
   socket.emit('createMessage', {
-    from: 'User',
     text: $messageTextBox.val()
   }, function(data){
     $messageSendBtn.attr('disabled', false);
